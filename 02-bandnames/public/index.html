@@ -10,49 +10,19 @@
 </head>
 
 <body class="container">
-    <h1 class="mt-5">Mini Chat</h1>
+    <h1 class="mt-5">Acceso denegado</h1>
     <hr>
-    <form action="" id="miFormulario">
-        <div class="row">
-            <div class="col-8">
-                <input type="text" id="txtMensaje" placeholder="Mensaje" class="form-control">
-
-            </div>
-            <dic class="col-4">
-                <button class="btn-primary btn">Enviar</button>
-            </dic>
-        </div>
-    </form>
-    <div class="row">
-        <div class="col">
-            <ul id="misMensajes">
-            </ul>
-        </div>
-    </div>
-
-
 
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.7.4/socket.io.js"
         integrity="sha512-tE1z+95+lMCGwy+9PnKgUSIeHhvioC9lMlI7rLWU0Ps3XTdjRygLcy4mLuL0JAoK4TLdQEyP0yOl/9dMOqpH/Q=="
         crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script>
-        const socket = io('https://react-socket-f3459464e4e3.herokuapp.com/');
-
-        const formulario = document.querySelector('#miFormulario');
-        const mensajes = document.querySelector('#misMensajes');
-        const txtMensaje = document.querySelector('#txtMensaje');
-        
-        formulario.addEventListener('submit', (ev) => {
-            ev.preventDefault();
-            const texto = txtMensaje.value;
-            socket.emit('mensaje-to-server', { texto });
-            txtMensaje.value = '';
-        });
-
-        socket.on('mensaje-from-server',(data)=>{
-            mensajes.innerHTML += `<li>${ data.texto }</li>`;
+        const socket = io('http://localhost:8080');
+        socket.on('currend-bands', (data)=>{
+            console.log(data)
         })
+       
     </script>
 </body>
 
