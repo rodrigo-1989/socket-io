@@ -4,10 +4,6 @@ class BandList {
     constructor() {
         this.bands = [
             new Band('Metalica'),
-            new Band('Heroes del silencio'),
-            new Band('Heavy nopal'),
-            new Band('Bon Jovi'),
-            new Band('Aerosmith'),
         ];
     }
 
