@@ -7,12 +7,10 @@ export const MapaPage = () => {
     const { coords, setRef, nuevoMarcador$, enMovimiento$ } = useMapBox(puntoInicial);
     useEffect(() => {
         nuevoMarcador$.subscribe(marcador => {
-            console.log(marcador)
         })
     }, [nuevoMarcador$]);
     useEffect(()=>{
-        enMovimiento$.subscribe(mov =>{
-            console.log(mov.id);
+        enMovimiento$.subscribe(movimiento =>{
         });
     },[enMovimiento$])
     return (
