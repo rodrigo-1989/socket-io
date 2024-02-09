@@ -1,35 +1,26 @@
-import mapboxgl from 'mapbox-gl'; // Load worker code separately with worker-loader}
-import { useEffect, useRef, useState } from 'react';
+import { useEffect } from "react";
+import { useMapBox } from "../hooks/useMapBox"
+
+const puntoInicial = { lng: -122.4725, lat: 37.8010, zoom: 13.5 };
 
 export const MapaPage = () => {
-    mapboxgl.accessToken = 'pk.eyJ1Ijoicm9kcmlnby1qcmxtLTE5ODkiLCJhIjoiY2xzY2NkZXNlMG52NzJocWsyYzZxaHppMSJ9.EXex_vuNsPVxZiK-Upt-LQ';
-    const puntoInicial = { lng: -103, lat: 20, zoom: 5 };
-    const mapaDiv = useRef();
-    const [mapa, setMapa] = useState();
-    const [coords, setCoords] = useState(puntoInicial);
+    const { coords, setRef, nuevoMarcador$, enMovimiento$ } = useMapBox(puntoInicial);
     useEffect(() => {
-        let map = new mapboxgl.Map({
-            container: mapaDiv.current,
-            style: 'mapbox://styles/mapbox/streets-v11',
-            center: [puntoInicial.lng, puntoInicial.lat],
-            zoom: puntoInicial.zoom
-        });
-        setMapa(map);
-    }, [])
-
-    useEffect(() => {
-        mapa?.on('move', () => {
-            const { lat, lng } = mapa.getCenter();
-            setCoords({ lat:lat.toFixed(4), lng:lng.toFixed(4), zoom:mapa.getZoom().toFixed(4) });
+        nuevoMarcador$.subscribe(marcador => {
+            console.log(marcador)
         })
-        return () => mapa?.off('move');
-    }, [mapa]);
+    }, [nuevoMarcador$]);
+    useEffect(()=>{
+        enMovimiento$.subscribe(mov =>{
+            console.log(mov.id);
+        });
+    },[enMovimiento$])
     return (
         <>
             <div className='info'>
                 lng: {coords.lng} | lat: {coords.lat} | zoom: {coords.zoom}
             </div>
-            <div ref={mapaDiv} className='mapContainer'>jjj</div>
+            <div ref={setRef} className='mapContainer'>jjj</div>
         </>
     )
 }
