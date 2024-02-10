@@ -23,28 +23,34 @@ export const useMapBox = (puntoInicial) => {
     const mapa = useRef();
     const [coords, setCoords] = useState(puntoInicial);
 
-    //Funcion para agregar marcadore
+    //Funcion para agregar marcadores
 
-    const agregarMarcador = useCallback((ev) => {
-        const { lng, lat } = ev.lngLat;
+    const agregarMarcador = useCallback((ev, id) => {
+        const { lng, lat } = ev.lngLat || ev;
         const marker = new mapboxgl.Marker();
-        marker.id = v4();
+        marker.id = id ?? v4();
         marker
             .setLngLat([lng, lat])
             .addTo(mapa.current)
             .setDraggable(true);
         marcadores.current[marker.id] = marker;
         //Si el marcador tiene ID n oemitir
-        nuevoMarcador.current.next({ id: marker.id, lat, lng });
+        if (!id)
+            nuevoMarcador.current.next({ id: marker.id, lat, lng });
         marker.on('drag', ({ target }) => {
             const { id } = target;
             const { lng, lat } = target.getLngLat();
             enMovimiento.current.next({ id, lng, lat });
 
         });
-    })
+    },[]);
+
+    const actualizarPocicion = useCallback (({id, lng, lat})=>{
+        marcadores.current[id].setLngLat([lng, lat]);
+    },[])
+
     useEffect(() => {
-        let map = new mapboxgl.Map({
+        const map = new mapboxgl.Map({
             container: mapaDiv.current,
             style: 'mapbox://styles/mapbox/streets-v11',
             center: [puntoInicial.lng, puntoInicial.lat],
@@ -72,6 +78,7 @@ export const useMapBox = (puntoInicial) => {
     }, [agregarMarcador])
     return {
         agregarMarcador,
+        actualizarPocicion,
         coords, marcadores,
         nuevoMarcador$: nuevoMarcador.current,
         enMovimiento$: enMovimiento.current,

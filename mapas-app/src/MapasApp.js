@@ -1,11 +1,11 @@
 
-import { SocketContext } from './context/SocketContext'
+import { SocketProvider } from './context/SocketContext'
 import { MapaPage } from './pages/MapaPage'
 
 export const MapasApp = () => {
   return (
-    <SocketContext.Provider>
+    <SocketProvider>
       <MapaPage /> 
-    </SocketContext.Provider>
+    </SocketProvider>
   )
 }
