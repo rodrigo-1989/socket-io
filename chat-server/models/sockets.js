@@ -6,11 +6,14 @@ class Sockets {
 
     socketsEvents() {
         this.io.on('connection', (socket) => {
-            socket.on('mensaje-to-server', (data) => {
-                console.log(data);
-                this.io.emit('mensaje-from-server', data);
-            })
-        })
+            //Validar el token
+            //Saber que usuario esta activo
+            //Emitir todos los usuarios conectados
+            //Unirme a una sala especifica
+            //Escuchar cuando el cliente manda un mensaje
+            //Manejar el disconnct
+            //
+        });
     }
 }
 module.exports = Sockets;

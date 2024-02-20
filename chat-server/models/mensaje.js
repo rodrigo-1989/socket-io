@@ -4,16 +4,28 @@ const { Schema, model } = require('mongoose');
 const MensajeSchema = Schema({
     de: {
         type: Schema.Types.ObjectId,
-        ref:'Usuario',
+        ref: 'Usuario',
         required: true
     },
-    
-});
+    para: {
+        type: Schema.Types.ObjectId,
+        ref: 'Usuario',
+        required: true
+    },
+    mensaje: {
+        type: String,
+        require: true
+    }
+},
+    {
+        timeStamps: true
+    }
+);
 
-UsuarioSchema.method('toJSON', function () {
-    const { __v, _id, password, ...object } = this.toObject();
+MensajeSchema.method('toJSON', function () {
+    const { __v, _id, ...object } = this.toObject();
     object.uid = _id;
     return object;
 });
 
-module.exports = model('Usuario', UsuarioSchema);
+module.exports = model('Mensaje', MensajeSchema);
