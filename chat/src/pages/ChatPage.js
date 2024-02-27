@@ -10,11 +10,9 @@ export const ChatPage = () => {
       <div className="inbox_msg">
 
         <InboxPeople />
-        <ChatSelect />
-        {/* <Messages/> */}
+        {/* <ChatSelect /> */}
+        <Messages />
       </div>
-
-
     </div>
   )
 }
