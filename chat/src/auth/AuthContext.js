@@ -12,7 +12,6 @@ const initialState = {
     email: null
 }
 
-
 export const AuthProvider = ({ children }) => {
     const [auth, setAuth] = useState(initialState);
 
@@ -27,7 +26,6 @@ export const AuthProvider = ({ children }) => {
                 logged: true,
                 name: nombre, email
             });
-            console.log('Authenticado')
         }
         return resp.ok;
     }
@@ -35,14 +33,13 @@ export const AuthProvider = ({ children }) => {
         const resp = await fetchSinToken('login/new', { email, password, nombre }, 'POST');
         if (resp.ok) {
             localStorage.setItem('token', resp.token);
-            const { uid, nombre, email } = resp.usuarioDB;
+            const { uid, nombre, email } = resp.usuario;
             setAuth({
                 uid,
-                checking: true,
+                checking: false,
                 logged: true,
                 name: nombre, email
             });
-            console.log('Registrado')
         }
         return resp.ok;
     }
@@ -59,7 +56,6 @@ export const AuthProvider = ({ children }) => {
             localStorage.setItem('token', resp.token);
             const { uid, nombre, email } = resp.usuario;
             setAuth({ uid, checking: false, logged: true, name: nombre, email });
-            console.log('Token restablecido');
             return true;
         } else {
             setAuth({ uid: null, checking: false, logged: false });
@@ -68,8 +64,13 @@ export const AuthProvider = ({ children }) => {
     }, []);
 
     const logout = () => {
-
+        localStorage.removeItem('token');
+        setAuth({
+            checking: false,
+            logged: false
+        })
     }
+
     return (
         <AuthContext.Provider value={{
             auth,
