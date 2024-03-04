@@ -20,10 +20,10 @@ export const AuthProvider = ({ children }) => {
         const resp = await fetchSinToken('login', { email, password }, 'POST');
         if (resp.ok) {
             localStorage.setItem('token', resp.token);
-            const { uid, nombre, email } = resp.usuario;
+            const { uid, nombre, email } = resp.usuarioDB;
             setAuth({
                 uid,
-                checking: true,
+                checking: false,
                 logged: true,
                 name: nombre, email
             });
@@ -33,10 +33,9 @@ export const AuthProvider = ({ children }) => {
     }
     const register = async (nombre, email, password) => {
         const resp = await fetchSinToken('login/new', { email, password, nombre }, 'POST');
-        console.log(object);
         if (resp.ok) {
             localStorage.setItem('token', resp.token);
-            const { uid, nombre, email } = resp.usuario;
+            const { uid, nombre, email } = resp.usuarioDB;
             setAuth({
                 uid,
                 checking: true,
