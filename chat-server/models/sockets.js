@@ -1,4 +1,4 @@
-const { usuarioConectado, usuarioDesconectado, getUsuarios } = require("../controllers/sockets");
+const { usuarioConectado, usuarioDesconectado, getUsuarios, grabarMensaje } = require("../controllers/sockets");
 const { comprobarToken } = require("../helper/jwt");
 
 class Sockets {
@@ -19,12 +19,21 @@ class Sockets {
 
             await usuarioConectado(uid);
 
-            socket.on('disconnect', async() => {
-                await usuarioDesconectado(uid);
+            socket.join(uid);
+
+
+            this.io.emit('lista-usuarios', await getUsuarios());
+
+            socket.on('mensaje-personal',async (payload) => {
+                const mensaje = await grabarMensaje(payload);
+                this.io.to(payload.para).emit('mensaje-personal', mensaje);
+                this.io.to(payload.de).emit('mensaje-personal', mensaje);
             });
 
-            this.io.emit('lista-usuarios',await getUsuarios())
-
+            socket.on('disconnect', async () => {
+                await usuarioDesconectado(uid);
+                this.io.emit('lista-usuarios', await getUsuarios())
+            });
             //Validar el token
             //Saber que usuario esta activo
             //Emitir todos los usuarios conectados

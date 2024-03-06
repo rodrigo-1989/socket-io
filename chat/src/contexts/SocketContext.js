@@ -1,7 +1,9 @@
 import React, { createContext, useContext, useEffect } from 'react';
 import { useSocket } from '../hooks/useSocket';
 import { AuthContext } from '../auth/AuthContext';
-import { ChatContext } from './chatContext';
+import { ChatContext } from './chat/ChatContext';
+import { types } from '../types/types';
+import { scrollToBottomAnimated } from '../helpers/scrollToBottom';
 
 export const SocketContext = createContext();
 
@@ -23,8 +25,15 @@ export const SocketProvider = ({ children }) => {
 
     useEffect(() => {
         socket?.on('lista-usuarios', (usuarios) => {
-            dispatch({ type: '', payload: usuarios})
+            dispatch({ type: types.usuariosCargados, payload: usuarios });
         });
+    }, [socket, dispatch]);
+
+    useEffect(() => {
+        socket?.on('mensaje-personal', (mensaje) => {
+            dispatch({ type: types.nuevoMensaje, payload: mensaje })
+        });
+        scrollToBottomAnimated('mensajes');
     }, [socket, dispatch]);
 
     return (
